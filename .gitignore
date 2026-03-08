@@ -1,7 +1,10 @@
-cmake-build-release
-cmake-emscripten
-cmakelists
-external
+*cmake-build-release
+*cmake-emscripten
+*cmakelists
+*external
+.idea
+.DS_Store
+
 assets
 olafmain.cpp
 tempmain.cpp
