@@ -34,6 +34,6 @@ target_link_libraries(ECSEngine PRIVATE
         #SDL3_image::SDL3_image-static
 )
 
-set(CMAKE_TOOLCHAIN_FILE "/Users/gordie/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake")
+#set(CMAKE_TOOLCHAIN_FILE "/Users/gordie/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake")
 
 

@@ -103,7 +103,6 @@ static void generateNewColorBuffer(const GLuint& instanceVAO, GLuint& instanceVB
 
     glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
 
-    gl(instanceVBO);
 }
 
 
