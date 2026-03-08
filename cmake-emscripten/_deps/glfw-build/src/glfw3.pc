@@ -1,0 +1,13 @@
+prefix=/Users/gordie/emsdk/upstream/emscripten/cache/sysroot
+exec_prefix=${prefix}
+includedir=/Users/gordie/emsdk/upstream/emscripten/cache/sysroot/include
+libdir=/Users/gordie/emsdk/upstream/emscripten/cache/sysroot/lib
+
+Name: GLFW
+Description: A multi-platform library for OpenGL, window and input
+Version: 3.5.0
+URL: https://www.glfw.org/
+Requires.private: 
+Libs: -L${libdir} -lglfw3
+Libs.private: 
+Cflags: -I${includedir}

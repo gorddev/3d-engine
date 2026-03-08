@@ -1,0 +1,34 @@
+_deps/glfw-build/src/CMakeFiles/glfw.dir/posix_time.c.o: \
+  /Users/gordie/Developer/WebEngine/cmake-emscripten/_deps/glfw-src/src/posix_time.c \
+  /Users/gordie/Developer/WebEngine/cmake-emscripten/_deps/glfw-src/src/internal.h \
+  /Users/gordie/Developer/WebEngine/cmake-emscripten/_deps/glfw-src/src/../include/GLFW/glfw3.h \
+  /Users/gordie/emsdk/upstream/lib/clang/22/include/stddef.h \
+  /Users/gordie/emsdk/upstream/emscripten/cache/sysroot/include/stddef.h \
+  /Users/gordie/emsdk/upstream/lib/clang/22/include/__stddef_header_macro.h \
+  /Users/gordie/emsdk/upstream/lib/clang/22/include/__stddef_ptrdiff_t.h \
+  /Users/gordie/emsdk/upstream/lib/clang/22/include/__stddef_size_t.h \
+  /Users/gordie/emsdk/upstream/lib/clang/22/include/__stddef_wchar_t.h \
+  /Users/gordie/emsdk/upstream/lib/clang/22/include/__stddef_null.h \
+  /Users/gordie/emsdk/upstream/lib/clang/22/include/__stddef_offsetof.h \
+  /Users/gordie/emsdk/upstream/lib/clang/22/include/stdint.h \
+  /Users/gordie/emsdk/upstream/emscripten/cache/sysroot/include/stdint.h \
+  /Users/gordie/emsdk/upstream/emscripten/cache/sysroot/include/bits/alltypes.h \
+  /Users/gordie/emsdk/upstream/emscripten/cache/sysroot/include/bits/stdint.h \
+  /Users/gordie/emsdk/upstream/lib/clang/22/include/stdbool.h \
+  /Users/gordie/emsdk/upstream/emscripten/cache/sysroot/include/stdbool.h \
+  /Users/gordie/Developer/WebEngine/cmake-emscripten/_deps/glfw-src/src/platform.h \
+  /Users/gordie/Developer/WebEngine/cmake-emscripten/_deps/glfw-src/src/null_platform.h \
+  /Users/gordie/Developer/WebEngine/cmake-emscripten/_deps/glfw-src/src/null_joystick.h \
+  /Users/gordie/Developer/WebEngine/cmake-emscripten/_deps/glfw-src/src/posix_thread.h \
+  /Users/gordie/emsdk/upstream/emscripten/cache/sysroot/include/pthread.h \
+  /Users/gordie/emsdk/upstream/emscripten/cache/sysroot/include/features.h \
+  /Users/gordie/emsdk/upstream/emscripten/cache/sysroot/include/sched.h \
+  /Users/gordie/emsdk/upstream/emscripten/cache/sysroot/include/compat/time.h \
+  /Users/gordie/emsdk/upstream/emscripten/cache/sysroot/include/time.h \
+  /Users/gordie/Developer/WebEngine/cmake-emscripten/_deps/glfw-src/src/posix_time.h \
+  /Users/gordie/Developer/WebEngine/cmake-emscripten/_deps/glfw-src/src/../include/GLFW/glfw3native.h \
+  /Users/gordie/emsdk/upstream/emscripten/cache/sysroot/include/unistd.h \
+  /Users/gordie/emsdk/upstream/emscripten/cache/sysroot/include/wasi/api.h \
+  /Users/gordie/emsdk/upstream/emscripten/cache/sysroot/include/bits/posix.h \
+  /Users/gordie/emsdk/upstream/emscripten/cache/sysroot/include/sys/time.h \
+  /Users/gordie/emsdk/upstream/emscripten/cache/sysroot/include/sys/select.h

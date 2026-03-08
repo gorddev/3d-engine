@@ -1,0 +1,1 @@
+-I"/Users/gordie/Developer/WebEngine/cmake-emscripten/_deps/glfw-src/include" -I"/Users/gordie/Developer/WebEngine/cmake-emscripten/_deps/glfw-src/src" -I"/Users/gordie/Developer/WebEngine/cmake-emscripten/_deps/glfw-build/src"

@@ -1,0 +1,12 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/gordie/Developer/WebEngine/cmake-emscripten/cmake_install.cmake",
+		"/Users/gordie/Developer/WebEngine/cmake-emscripten/_deps/glm-build/cmake_install.cmake",
+		"/Users/gordie/Developer/WebEngine/cmake-emscripten/_deps/glm-build/glm/cmake_install.cmake",
+		"/Users/gordie/Developer/WebEngine/cmake-emscripten/src/cmake_install.cmake",
+		"/Users/gordie/Developer/WebEngine/cmake-emscripten/src/rendering/cmake_install.cmake",
+		"/Users/gordie/Developer/WebEngine/cmake-emscripten/cmakelists/emscripten/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

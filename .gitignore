@@ -1,0 +1,9 @@
+cmake-build-release
+cmake-emscripten
+cmakelists
+external
+assets
+olafmain.cpp
+tempmain.cpp
+LocalCmakeLists.txt
+WebCMakeLists.txt

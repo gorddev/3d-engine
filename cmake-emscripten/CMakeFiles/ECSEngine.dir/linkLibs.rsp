@@ -1,0 +1,1 @@
+ src/rendering/libRender_Lib.a "_deps/glm-build/glm/libglm.a" -lglfw -sUSE_SDL=3 

@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/gordie/Developer/WebEngine/cmake-emscripten/_deps/glfw-subbuild/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
