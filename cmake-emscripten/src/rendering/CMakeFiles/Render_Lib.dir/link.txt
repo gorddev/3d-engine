@@ -1,2 +1,0 @@
-/Users/gordie/emsdk/upstream/emscripten/emar qc libRender_Lib.a CMakeFiles/Render_Lib.dir/Renderer.cpp.o CMakeFiles/Render_Lib.dir/Window.cpp.o CMakeFiles/Render_Lib.dir/glFunctions/glTextures.cpp.o CMakeFiles/Render_Lib.dir/glFunctions/glShaders.cpp.o CMakeFiles/Render_Lib.dir/glFunctions/glBuffers.cpp.o CMakeFiles/Render_Lib.dir/shaders/Shader.cpp.o CMakeFiles/Render_Lib.dir/shaders/ShaderManager.cpp.o CMakeFiles/Render_Lib.dir/texture/stb_image.c.o CMakeFiles/Render_Lib.dir/texture/TextureRegister.cpp.o
-/Users/gordie/emsdk/upstream/emscripten/emranlib libRender_Lib.a

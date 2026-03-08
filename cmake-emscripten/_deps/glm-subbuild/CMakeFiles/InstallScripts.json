@@ -1,7 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/Users/gordie/Developer/WebEngine/cmake-emscripten/_deps/glm-subbuild/cmake_install.cmake"
-	],
-	"Parallel" : false
-}
