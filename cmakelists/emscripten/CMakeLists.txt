@@ -11,12 +11,9 @@ target_link_options(ECSEngine PRIVATE
         "-std=c++23"
         #"--preload-file=assets"
         "--emrun"
-        "-sUSE_GLFW=3"
-        "--browser=chrome"
         "-Wno-error=limited-postlink-optimizations"
         "-sMAXIMUM_MEMORY=512MB"
         "-sALLOW_MEMORY_GROWTH"
-        "-DGLFW_BUILD_WAYLAN"
         #"-fwasm-exceptions"
 
         #"-fsanitize=address"

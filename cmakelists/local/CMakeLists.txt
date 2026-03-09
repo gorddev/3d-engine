@@ -1,12 +1,22 @@
 # options for compiling locally
 
 # compiler warning
+if (APPLE)
 target_compile_options(ECSEngine PRIVATE
         -Werror
         -Wall
         -DGL_SILENCE_DEPRECATION
         -O3
 )
+elseif(UNIX)
+target_compile_options(ECSEngine PRIVATE
+    -Werror
+    -Wall
+    -DGL_SILENCE_DEPRECATION
+    -O3
+    -DSDL_X11_XTEST=OFF
+)
+endif()
 
 # other libraries
 target_link_libraries(ECSEngine PRIVATE

@@ -6,9 +6,14 @@ project(WebEngine)
 #find_package(SDL3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
-if(UNIX AND NOT APPLE)
+if(UNIX AND NOT APPLE AND NOT EMSCRIPTEN)
     set(X11_DEPS_COMMAND "sudo apt update && sudo apt install libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libx11-dev")
+
+    # disable some SDL features
     set(SDL_X11_XSCRNSAVER OFF CACHE BOOL "" FORCE)
+    set(SDL_WAYLAND        OFF CACHE BOOL "" FORCE)
+    set(SDL_TEST_LIBRARY   OFF CACHE BOOL "" FORCE)
+    set(SDL_EXAMPLES       OFF CACHE BOOL "" FORCE)
 
     find_package(X11 REQUIRED)
     find_path(XRANDR_PATH NAMES X11/extensions/Xrandr.h)
@@ -39,7 +44,7 @@ FetchContent_MakeAvailable(GLM) # makes content available
 if(EMSCRIPTEN)
     # emscripten doesn't need to fetch, as it's a compiler flag
     set(CMAKE_EXECUTABLE_SUFFIX ".html")
-else()
+elseif(APPLE)
     # otherwise we need to get it.
     FetchContent_Declare(
             GLFW
