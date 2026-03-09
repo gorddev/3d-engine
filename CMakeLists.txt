@@ -12,13 +12,18 @@ set(SDL_X11_XINPUT2 OFF CACHE BOOL "" FORCE)
 set(SDL_X11_XSCRNSAVER OFF CACHE BOOL "" FORCE)
 set(SDL_X11_XTEST OFF CACHE BOOL "" FORCE)
 set(SDL_X11_XFIXES OFF CACHE BOOL "" FORCE)
-set(SDL_X11_XINPUT2 OFF CACHE BOOL "" FORCE)
 set(SDL_X11_XINPUT2_MULTITOUCH OFF CACHE BOOL "" FORCE)
 
 # we also don't need these for some reason with VNC
 set(SDL_WAYLAND OFF CACHE BOOL "" FORCE)
 set(SDL_DBUS OFF CACHE BOOL "" FORCE)
 set(SDL_IBUS OFF CACHE BOOL "" FORCE)
+
+# disable some SDL features we don't need
+set(SDL_RENDER OFF CACHE BOOL "" FORCE)
+set(SDL_CAMERA OFF CACHE BOOL "" FORCE)
+set(SDL_TEST_LIBRARY OFF CACHE BOOL "" FORCE)
+set(SDL_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 if(UNIX AND NOT APPLE AND NOT EMSCRIPTEN)
     message("Building for Linux")
@@ -77,18 +82,23 @@ elseif(APPLE)
     FetchContent_MakeAvailable(GLFW)
 endif()
 
-
-# disable some SDL features we don't need
-set(SDL_RENDER OFF CACHE BOOL "" FORCE)
-set(SDL_CAMERA OFF CACHE BOOL "" FORCE)
-set(SDL_WAYLAND OFF CACHE BOOL "" FORCE)
-set(SDL_TEST_LIBRARY OFF CACHE BOOL "" FORCE)
-set(SDL_EXAMPLES OFF CACHE BOOL "" FORCE)
 # now we need sdl3
 FetchContent_Declare(
     SDL3
     GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
     GIT_TAG main
+    CMAKE_ARGS
+        -DSDL_X11_XINPUT=OFF
+        -DSDL_X11_XINPUT2=OFF
+        -DSDL_X11_XSCRNSAVER=OFF
+        -DSDL_X11_XTEST=OFF
+        -DSDL_X11_XFIXES=OFF
+        -DSDL_WAYLAND=OFF
+        -DSDL_RENDER=OFF
+        -DSDL_DBUS=OFF
+        -DSDL_IBUS=OFF
+        -DSDL_CAMERA=OFF
+        -DSDL_TEST_LIBRARY=OFF
 )
 FetchContent_MakeAvailable(SDL3)
 
