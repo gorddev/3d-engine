@@ -14,7 +14,7 @@ namespace gan {
     };
 
     /// Flags for window creation
-    enum WindowProperty : unsigned long long {
+    enum WindowProperty : uint64_t {
         WindowFlagNone = 0,
         WindowFullscreen = SDL_WINDOW_FULLSCREEN,
         WindowResizable = SDL_WINDOW_RESIZABLE,
