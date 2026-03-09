@@ -3,7 +3,7 @@ set(CMAKE_CXX_STANDARD 23)
 
 project(WebEngine)
 
-find_package(SDL3 REQUIRED)
+#find_package(SDL3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
 include(FetchContent)
@@ -17,11 +17,13 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(GLM) # makes content available
-# GLFW fetch
 
+# GLFW fetch
 if(EMSCRIPTEN)
+    # emscripten doesn't need to fetch, as it's a compiler flag
     set(CMAKE_EXECUTABLE_SUFFIX ".html")
 else()
+    # otherwise we need to get it.
     FetchContent_Declare(
             GLFW
             GIT_REPOSITORY https://github.com/glfw/glfw.git
@@ -32,6 +34,14 @@ else()
     set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
     FetchContent_MakeAvailable(GLFW)
 endif()
+
+# now we need sdl3
+FetchContent_Declare(
+    SDL3
+    GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
+    GIT_TAG main
+)
+FetchContent_MakeAvailable(SDL3)
 
 add_subdirectory(src)
 
