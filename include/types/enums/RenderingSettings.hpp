@@ -28,14 +28,14 @@ namespace gan {
     };
 
 
-    inline void operator&=(WindowProperty w1, const uint64_t w2) noexcept {
+    inline void operator&=(WindowProperty& w1, const WindowProperty w2) noexcept {
         w1 = static_cast<WindowProperty>(static_cast<uint64_t>(w1) & w2);
     }
-    inline void operator|=(WindowProperty w1, const uint64_t w2) noexcept {
+    inline void operator|=(WindowProperty& w1, const WindowProperty w2) noexcept {
         w1 = static_cast<WindowProperty>(static_cast<uint64_t>(w1) | w2);
     }
 
-    inline WindowProperty operator|(WindowProperty w1, const uint64_t w2) noexcept {
+    inline WindowProperty operator|(WindowProperty w1, const WindowProperty w2) noexcept {
         return static_cast<WindowProperty>(static_cast<uint64_t>(w1) | w2);
     }
 
