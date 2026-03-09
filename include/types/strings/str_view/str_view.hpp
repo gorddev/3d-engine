@@ -14,7 +14,6 @@ namespace gan {
     /** Allows you to send an fstring along a buffer without template information. Very helpful**/
     class str_view final {
     private:
-        friend str_view;
         /// Contains the data of the original fstring
         char* data;
         /// Contains the length of the original fstring
