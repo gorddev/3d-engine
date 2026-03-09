@@ -12,8 +12,8 @@
     #ifndef GL_WRITE_ONLY
     #define GL_WRITE_ONLY 0x88B9
     #endif
-#else
-    #include <OpenGL.h>
+#elifdef __linux__
+    #include <GLES3/gl3.h>
 #endif
 
 // GL_CHECK function which just polls all the errors and returns the error code, line, & file.
