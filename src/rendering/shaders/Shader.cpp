@@ -71,6 +71,7 @@ void Shader::updatePerFrameUniforms(const EngineCore& core, const Camera& cam) {
             glUniformMatrix4fv(u.location, 1, false, glm::value_ptr(cam.view()));
             break;
         default:
+            break;
         }
     }
 }
