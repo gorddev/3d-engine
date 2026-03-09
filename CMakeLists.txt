@@ -8,6 +8,7 @@ find_package(OpenGL REQUIRED)
 
 if(UNIX AND NOT APPLE)
     set(X11_DEPS_COMMAND "sudo apt update && sudo apt install libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libx11-dev")
+    set(SDL_X11_XSCRNSAVER OFF CACHE BOOL "" FORCE)
 
     find_package(X11 REQUIRED)
     find_path(XRANDR_PATH NAMES X11/extensions/Xrandr.h)
@@ -16,7 +17,7 @@ if(UNIX AND NOT APPLE)
         message(FATAL_ERROR
             " Missing Dependencies to compile the engine:\n"
             " \tGLFW requires X11 development headers to build from source.\n"
-            " \tPlease run the following command to install them:\n\n"
+            " \tPlease run the following command to install them:\n"
             "   ${X11_DEPS_COMMAND}\n"
         )
     endif()
