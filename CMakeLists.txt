@@ -6,6 +6,22 @@ project(WebEngine)
 #find_package(SDL3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
+if(UNIX AND NOT APPLE)
+    set(X11_DEPS_COMMAND "sudo apt update && sudo apt install libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libx11-dev")
+
+    find_package(X11 REQUIRED)
+    find_path(XRANDR_PATH NAMES X11/extensions/Xrandr.h)
+
+    if(NOT XRANDR_PATH)
+        message(FATAL_ERROR
+            " Missing Dependencies to compile the engine:\n"
+            " \tGLFW requires X11 development headers to build from source.\n"
+            " \tPlease run the following command to install them:\n\n"
+            "   ${X11_DEPS_COMMAND}\n"
+        )
+    endif()
+endif()
+
 include(FetchContent)
 ############ GLM
 # GLM Fetch
