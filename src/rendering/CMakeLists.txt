@@ -20,8 +20,15 @@ target_include_directories(Render_Lib PRIVATE
         ${CMAKE_SOURCE_DIR}/external
 )
 
+if (APPLE)
 target_link_libraries(Render_Lib PRIVATE
         SDL3::SDL3
         glm::glm
         glfw
 )
+else()
+target_link_libraries(Render_Lib PRIVATE
+    SDL3::SDL3
+    glm::glm
+)
+endif()
