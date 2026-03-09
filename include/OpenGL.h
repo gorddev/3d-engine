@@ -23,3 +23,4 @@ GLenum err = glGetError(); \
 if (err != GL_NO_ERROR) \
 std::cerr << "GL error: " << err << " at " << __LINE__ << " in " << __FILE_NAME__ << std::endl; \
 } while (0)
+

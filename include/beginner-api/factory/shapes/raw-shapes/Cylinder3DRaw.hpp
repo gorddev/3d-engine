@@ -62,7 +62,7 @@ namespace gan {
 
                 static_assert(alignof(gl::vertex3) <= alignof(std::max_align_t));
                 // first we get the bottom & top rendered.
-                for (int i = 0; i < Detail; i++) {
+                for (size_t i = 0; i < Detail; i++) {
                     indexList[i*3] = i;
                     indexList[(i*3 + 1)] = (i + 1)%Detail;
                     indexList[i*3+2] = t;
@@ -72,7 +72,7 @@ namespace gan {
                     indexList[(i+Detail)*3+2] = b;
 
                 }
-                for (int i = Detail*2*3, k =0; i < numIndices - 5; i+=6, k++) {
+                for (size_t i = Detail*2*3, k =0; i < numIndices - 5; i+=6, k++) {
                     indexList[i] = k;
                     indexList[i+1] = k + Detail;
                     indexList[i+2] = (k + 1)% Detail + Detail;
