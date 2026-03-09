@@ -8,7 +8,7 @@ namespace gan {
     template<uint8_t C>
     struct precision {
         static_assert(C <= 10, "Maximum float precision is 10 digits.");
-        precision<C>() = default;
+        precision() = default;
     };
 
     /** Allows you to send an fstring along a buffer without template information. Very helpful**/
