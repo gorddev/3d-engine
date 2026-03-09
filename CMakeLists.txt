@@ -6,11 +6,16 @@ project(WebEngine)
 #find_package(SDL3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
-if(UNIX AND NOT APPLE AND NOT EMSCRIPTEN)
+if(LINUX)
+    message("Building for Linux")
     set(X11_DEPS_COMMAND "sudo apt update && sudo apt install libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libx11-dev")
 
-    # disable some SDL features
+    # disable some SDL features that make compiling on linux annoying
     set(SDL_X11_XSCRNSAVER OFF CACHE BOOL "" FORCE)
+    set(SDL_X11_XTEST OFF CACHE BOOL "" FORCE)
+    set(SDL_X11_XFIXES OFF CACHE BOOL "" FORCE)
+    set(SDL_X11_XINPUT OFF CACHE BOOL "" FORCE)
+    set(SDL_IBUS       OFF CACHE BOOL "" FORCE)
     set(SDL_WAYLAND        OFF CACHE BOOL "" FORCE)
     set(SDL_TEST_LIBRARY   OFF CACHE BOOL "" FORCE)
     set(SDL_EXAMPLES       OFF CACHE BOOL "" FORCE)
@@ -26,6 +31,10 @@ if(UNIX AND NOT APPLE AND NOT EMSCRIPTEN)
             "   ${X11_DEPS_COMMAND}\n"
         )
     endif()
+elseif(APPLE)
+    message("Building for Apple")
+elseif(EMSCRIPTEN)
+    message("Building for Emscripten")
 endif()
 
 include(FetchContent)
