@@ -18,6 +18,9 @@ target_compile_options(ECSEngine PRIVATE
 )
 endif()
 
+
+
+if(APPLE)
 # other libraries
 target_link_libraries(ECSEngine PRIVATE
         Render_Lib
@@ -26,6 +29,15 @@ target_link_libraries(ECSEngine PRIVATE
         OpenGL::GL
         glfw
 )
+else()
+    target_link_libraries(ECSEngine PRIVATE
+        Render_Lib
+        SDL3::SDL3
+        glm::glm
+        OpenGL::GL
+    )
+endif()
+
 
 if(APPLE)
     target_link_libraries(ECSEngine PRIVATE
