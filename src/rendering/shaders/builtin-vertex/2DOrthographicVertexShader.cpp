@@ -2,10 +2,10 @@
 namespace gan {
 
     inline constexpr char Orthographic2DVertexShader[] =
-#ifdef __EMSCRIPTEN__
-R"(#version 300 es)"
-#else
+#ifdef __APPLE__
 R"(#version 410 core)"
+#else
+R"(#version 300 es)"
 #endif
 R"(
 precision mediump float;
