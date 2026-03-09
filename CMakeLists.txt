@@ -11,14 +11,17 @@ if(LINUX)
     set(X11_DEPS_COMMAND "sudo apt update && sudo apt install libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libx11-dev")
 
     # disable some SDL features that make compiling on linux annoying
+    set(SDL_X11_XINPUT OFF CACHE BOOL "" FORCE)
+    set(SDL_X11_XINPUT2 OFF CACHE BOOL "" FORCE)
     set(SDL_X11_XSCRNSAVER OFF CACHE BOOL "" FORCE)
     set(SDL_X11_XTEST OFF CACHE BOOL "" FORCE)
     set(SDL_X11_XFIXES OFF CACHE BOOL "" FORCE)
-    set(SDL_X11_XINPUT OFF CACHE BOOL "" FORCE)
-    set(SDL_IBUS       OFF CACHE BOOL "" FORCE)
-    set(SDL_WAYLAND        OFF CACHE BOOL "" FORCE)
-    set(SDL_TEST_LIBRARY   OFF CACHE BOOL "" FORCE)
-    set(SDL_EXAMPLES       OFF CACHE BOOL "" FORCE)
+    set(SDL_X11_XRANDR OFF CACHE BOOL "" FORCE) # If you get RandR errors too
+
+    # we also don't need these for some reason with VNC
+    set(SDL_WAYLAND OFF CACHE BOOL "" FORCE)
+    set(SDL_DBUS OFF CACHE BOOL "" FORCE)
+    set(SDL_IBUS OFF CACHE BOOL "" FORCE)
 
     find_package(X11 REQUIRED)
     find_path(XRANDR_PATH NAMES X11/extensions/Xrandr.h)
@@ -71,6 +74,13 @@ elseif(APPLE)
     FetchContent_MakeAvailable(GLFW)
 endif()
 
+
+# disable some SDL features we don't need
+set(SDL_RENDER OFF CACHE BOOL "" FORCE)
+set(SDL_CAMERA OFF CACHE BOOL "" FORCE)
+set(SDL_WAYLAND OFF CACHE BOOL "" FORCE)
+set(SDL_TEST_LIBRARY OFF CACHE BOOL "" FORCE)
+set(SDL_EXAMPLES OFF CACHE BOOL "" FORCE)
 # now we need sdl3
 FetchContent_Declare(
     SDL3
