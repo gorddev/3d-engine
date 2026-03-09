@@ -6,24 +6,25 @@ project(WebEngine)
 #find_package(SDL3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
-if(LINUX)
+
+set(SDL_X11_XINPUT OFF CACHE BOOL "" FORCE)
+set(SDL_X11_XINPUT2 OFF CACHE BOOL "" FORCE)
+set(SDL_X11_XSCRNSAVER OFF CACHE BOOL "" FORCE)
+set(SDL_X11_XTEST OFF CACHE BOOL "" FORCE)
+set(SDL_X11_XFIXES OFF CACHE BOOL "" FORCE)
+set(SDL_X11_XINPUT2 OFF CACHE BOOL "" FORCE)
+set(SDL_X11_XINPUT2_MULTITOUCH OFF CACHE BOOL "" FORCE)
+
+# we also don't need these for some reason with VNC
+set(SDL_WAYLAND OFF CACHE BOOL "" FORCE)
+set(SDL_DBUS OFF CACHE BOOL "" FORCE)
+set(SDL_IBUS OFF CACHE BOOL "" FORCE)
+
+if(UNIX AND NOT APPLE AND NOT EMSCRIPTEN)
     message("Building for Linux")
     set(X11_DEPS_COMMAND "sudo apt update && sudo apt install libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libx11-dev")
 
-    # disable some SDL features that make compiling on linux annoying
-    set(SDL_X11_XINPUT OFF CACHE BOOL "" FORCE)
-    set(SDL_X11_XINPUT2 OFF CACHE BOOL "" FORCE)
-    set(SDL_X11_XSCRNSAVER OFF CACHE BOOL "" FORCE)
-    set(SDL_X11_XTEST OFF CACHE BOOL "" FORCE)
-    set(SDL_X11_XFIXES OFF CACHE BOOL "" FORCE)
-    set(SDL_X11_XRANDR OFF CACHE BOOL "" FORCE)
-    set(SDL_X11_XINPUT2 OFF CACHE BOOL "" FORCE)
-    set(SDL_X11_XINPUT2_MULTITOUCH OFF CACHE BOOL "" FORCE)
-
-    # we also don't need these for some reason with VNC
-    set(SDL_WAYLAND OFF CACHE BOOL "" FORCE)
-    set(SDL_DBUS OFF CACHE BOOL "" FORCE)
-    set(SDL_IBUS OFF CACHE BOOL "" FORCE)
+    # disable some SDL features that make compiling on linux annoyin
 
     find_package(X11 REQUIRED)
     find_path(XRANDR_PATH NAMES X11/extensions/Xrandr.h)
