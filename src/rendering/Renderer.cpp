@@ -16,6 +16,7 @@ using namespace gan;
 
 
 Renderer::Renderer(EngineCore& core) : core(core) {
+
     gl_context = SDL_GL_CreateContext(core.window.sdl_window);
 
     SDL_GL_MakeCurrent(core.window.sdl_window, gl_context);
