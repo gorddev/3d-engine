@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <initializer_list>
 #include <optional>
+#include <utility>
 
 typedef uint32_t GLuint;
 typedef uint32_t GLenum;
