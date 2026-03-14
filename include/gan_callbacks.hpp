@@ -118,7 +118,7 @@ inline SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
 #else   //< Otherwise, grab the error code.
     int status = g_main(engine, argc, argv);
     if (status != 0) {
-        gan::print("Ending program. User returned from g_main() with exit code ",
+        gan::err::panic("SDL_AppInit()", "Ending program. User returned from g_main() with exit code ",
             status, ".\nTo continue with program, ensure that you return 0.\n");
         return SDL_APP_SUCCESS;
     }

@@ -13,13 +13,14 @@ precision mediump float;
 
 in vec2 vUV;
 in vec3 vNorm;
+in vec4 vColor;
+
+uniform sampler2D uTex;
 
 out vec4 color;
 
 void main() {
-    vec4 norm = normalize(gl_FragCoord);
-    norm.a = 1.0;
-    color = norm;
+    color = texture(uTex, vUV);
 }
 )";
 }

@@ -1,5 +1,7 @@
 
-#include <core/debug/gan_io.hpp>
+#include <core/debug/gan_err.hpp>
+
+#include <SDL3/SDL.h>
 
 #ifdef GAN_DEBUG
 #include <iostream>
@@ -10,8 +12,6 @@
 #include <types/math/dim2.hpp>
 #include <types/enums/RenderingSettings.hpp>
 #include <OpenGL.h>
-#include <SDL3/SDL_events.h>
-#include <SDL3/SDL_render.h>
 
 // created by gordie feb 16th. implementation for window
 
@@ -20,7 +20,7 @@ using namespace gan;
 Window::Window(const char windowName[], const dim2 dim, const WindowProperty flags)
     : flags(flags), dimensions(dim) {
 
-#ifdef __APPLE__
+#ifdef GAN_DESKTOP_GL
     // macOS core profiel
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
@@ -40,6 +40,7 @@ Window::Window(const char windowName[], const dim2 dim, const WindowProperty fla
         dim.w, dim.h,
         flags | SDL_WINDOW_OPENGL
     );
+
     if (!sdl_window)
         err::panic("Window::Window()", "Failed to make window with error: ",  SDL_GetError());
 }
@@ -52,8 +53,8 @@ void Window::_normalizeMousePos(float& x, float& y) const {
     int wx, wy;
     SDL_GetWindowSize(sdl_window, &wx, &wy);
 
-    x = 2.f*(x-wx)/dimensions.w +1.f;
-    y = -2.f*((y-wy)/dimensions.h) - 1.f;
+    x = (x-wx)/dimensions.w;
+    y = ((y-wy)/dimensions.h);
 }
 
 void Window::setDimensions(const dim2 dim) const {

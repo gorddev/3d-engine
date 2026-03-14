@@ -2,30 +2,24 @@
 #include <unordered_map>
 #include <vector>
 
-#include "render-math/Model.hpp"
+#include "render-primitives/Model.hpp"
 
 // made by gordie novak on feb 24th
 // sorts all the different types of objects that will Rendered so we don't
 // call open GL hundreds of times.
 
 namespace gan {
-
     struct RenderQueue {
         using shader_id = int;
         using texture_id = int;
 
         /// Vao instance contains a VertexBuffer, Texture_id, and a vector of associated models.
         struct ModelInstance {
-            /// Representative vertexBuffer.
-            gl::VertexBuffer vb;
-            /// Specific instance for this vbo
-            GLuint instVBO = 0, instCapacity = 0;
-            /// Representative mesh
-            gl::mesh mesh;
-            /// Vector of models that share a vbo and texture.
+            VertexBuffer vb;
+            Mesh mesh;
             std::vector<glm::mat4> models;
+            std::vector<RGBAVal> colors;
         };
-
 
         /// The tree mapping shaders to ModelInstances.
         std::unordered_map<shader_id, std::vector<ModelInstance>> modelTree;
@@ -35,9 +29,10 @@ namespace gan {
             if (modelTree.contains(model.mesh.shader)) {
                 for (auto& modelVec : modelTree[model.mesh.shader]) {
                     // If the VAO & Texture_Id match, we add them to the same ModelInstance.
-                    if (model.vb.vao == modelVec.vb.vao && model.mesh.gl_tex_id == modelVec.mesh.gl_tex_id) {
+                    if (model.vb.vao == modelVec.vb.vao && model.mesh.tex_id == modelVec.mesh.tex_id) {
                         // Add the transform if texture and vao match.
                         modelVec.models.push_back(model.t.compose());
+                        modelVec.colors.push_back(model.t.color);
                         return; //< early return.
                     }
                 }
@@ -53,9 +48,12 @@ namespace gan {
 
         /// Clears all ModelInstances in the model tree.
         void clearModelTree() {
-            for (auto& modelVec : modelTree)
-                for (auto& modelInst : modelVec.second)
+            for (auto& modelVec : modelTree) {
+                for (auto& modelInst : modelVec.second) {
                     modelInst.models.clear();
+                    modelInst.colors.clear();
+                }
+            }
         }
 
         /// Flush the entire model tree and clear all memory the RenderQueue uses.
@@ -66,5 +64,4 @@ namespace gan {
             modelTree.clear();
         }
     };
-
 }

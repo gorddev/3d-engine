@@ -83,7 +83,6 @@ namespace gan {
         void _onResize(SDL_Event &e);
         void _normalizeMousePos(float &x, float &y) const; ///< Gives mouse position in NDC (-1 to 1)
 
-
         // Ensure Immovability.
         Window operator=(const Window&) = delete;   ///< Nope. You can't use this.
         Window operator=(Window&&) = delete;        ///< Nope. You can't use this.

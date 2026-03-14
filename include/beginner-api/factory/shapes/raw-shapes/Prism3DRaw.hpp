@@ -3,7 +3,7 @@
 #include <glm/vec4.hpp>
 
 #include "../ShapeUtils.hpp"
-#include "rendering/glPrimitives/glVertex.hpp"
+#include "rendering/render-primitives/Vertex.hpp"
 
 // made by gordie novak on feb 21st, 2026
 // the rectangle is just like a square, but it's a rectangle!
@@ -22,8 +22,8 @@ namespace gan {
         };
 
         /// Constexpr vertex creation method.
-        static constexpr const gl::vertex3* vertices() noexcept {
-            static const gl::vertex3 prismVertices[5] = {
+        static constexpr const Vertex* vertices() noexcept {
+            static const Vertex prismVertices[5] = {
                 { 1.f, -1.f,  1.f, 1.0, 1.0, 1.0, 1.0},
                 { 1.f, -1.f, -1.f, 1.0, 1.0, 1.0, 1.0},
                 {-1.f,  -1.f, -1.f, 1.0, 1.0, 1.f, 1.0},

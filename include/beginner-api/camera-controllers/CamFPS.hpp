@@ -65,8 +65,8 @@ namespace gan {
         ) override {
             // Handle camera rotation movement.
             if (!requireRightClick || mouse.isRightClicked()) {
-                yaw -= mouse.getDeltaMouseX() * mouseSensitivity * 0.01f;
-                pitch -= mouse.getDeltaMouseY() * mouseSensitivity * 0.01f;
+                yaw -= mouse.getDeltaX() * mouseSensitivity * 0.01f;
+                pitch -= mouse.getDeltaY() * mouseSensitivity * 0.01f;
                 pitch = std::clamp(pitch, pitchMin, pitchMax);
 
                 cam.forward = {sinf(yaw), sinf(pitch), cosf(yaw)};

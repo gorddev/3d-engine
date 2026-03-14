@@ -5,7 +5,7 @@
 #include <glm/vec4.hpp>
 
 #include "Colors.hpp"
-#include "rendering/glPrimitives/glVertex.hpp"
+#include "rendering/render-primitives/Vertex.hpp"
 
 
 namespace gan {
@@ -18,9 +18,9 @@ namespace gan {
         { requires std::same_as<decltype(S::numIndices), const size_t>; };
     /// Ensures that the shape has a valid vertex generation function.
     template<typename S> concept has_static_vertex_generation_function =
-        requires(S s, std::array<gl::vertex3, S::numVertices>& v, glm::vec3 dim )
+        requires(S s, std::array<Vertex, S::numVertices>& v, glm::vec3 dim )
             { std::invoke(S::vertices,
-                std::forward<std::array<gl::vertex3, S::numVertices>&>(v),
+                std::forward<std::array<Vertex, S::numVertices>&>(v),
                 std::forward<glm::vec3>(dim));
             };
     /// Ensures that the shape has a valid static index generation function
@@ -31,7 +31,7 @@ namespace gan {
     /// - Must have a valid @code static constexpr size_t numVertices@endcode
     /// - Must have a valid @code static constexpr size_T numIndices@endcode
     /// - Must have a valid @code static vertices(...)@endcode that accepts
-    /// an array reference for @code std::array<gl::vertex3, numVertices>@endcode, and
+    /// an array reference for @code std::array<Vertex3, numVertices>@endcode, and
     /// a @code glm::vec3@endcode that specifies it's dimensions
     template<typename S> concept has_shape_requirements =
         struct_has_index_count<S> && struct_has_vertex_count<S> &&

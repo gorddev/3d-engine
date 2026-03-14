@@ -1,9 +1,7 @@
 // ReSharper disable CppNonExplicitConversionOperator
 #pragma once
 
-#include "rendering/glFunctions/glBuffers.hpp"
-#include "rendering/render-math/Model.hpp"
-#include "types/custom-data-structures/ref_count.hpp"
+#include "../../../rendering/render-primitives/Model.hpp"
 
 namespace gan {
 
@@ -19,9 +17,9 @@ namespace gan {
     struct ShapeAPI {
     protected:
         /// Underlying Vertex Buffer
-        gl::VertexBuffer vb;
+        VertexBuffer vb;
         /// Underlying mesh
-        gl::mesh mesh;
+        Mesh mesh;
         /// Floats represent the angle of rotation along each axis in object space
         glm::vec3 ang = glm::vec3(0.f);
     public:
@@ -29,6 +27,8 @@ namespace gan {
         glm::vec3 pos = glm::vec3(0.f);
         /// Scale in each cartesian direction (x,y,z).
         glm::vec3 scale = glm::vec3(1.f);
+        /// Color of the shape (r, g, b, a)
+        RGBAVal color{1.f,1.f,1.f,1.f};
 
 
         /// Constructor for a ShapeAPI. Requires a model.
@@ -43,7 +43,7 @@ namespace gan {
             return Model{
                 .vb = vb,
                 .mesh = mesh,
-                .t ={pos,{ang}, scale},
+                .t ={pos,{ang}, scale, color},
             };
         }
 

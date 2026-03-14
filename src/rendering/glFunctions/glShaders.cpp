@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-#include "../../../include/core/debug/gan_err.hpp"
+#include "../../../include/core/debug/gan_log.hpp"
 #include <vector>
 #include <fstream>
 #include <sstream>
@@ -24,7 +24,7 @@ static bool verifyProgramIntegrity(GLuint program) {
         std::vector<char> log(len);
 
         glGetProgramInfoLog(program, len, nullptr, log.data());
-        GAN_WriteError("verifyProgramIntegrity()", "Shader program linkage failed with error:\n", log.data());
+        GAN_WriteLog("verifyProgramIntegrity()", "Shader program linkage failed with error:\n", log.data());
         return false;
     }
     return true;
@@ -41,7 +41,7 @@ static bool verifyShaderIntegrity(GLuint shader) {
         ::std::vector<char> log(logLen);
         glGetShaderInfoLog(shader, logLen, nullptr, log.data());
 
-        GAN_WriteError("verifyShaderIntegrity()", "Shader compilation failed with error:\n", log.data());
+        GAN_WriteLog("verifyShaderIntegrity()", "Shader compilation failed with error:\n", log.data());
         return false;
     }
     return true;
@@ -64,13 +64,13 @@ static std::optional<GLuint> compileShader(const char* data, GLenum shaderType, 
 std::optional<GLuint> gl::compileShaderFromPath(GLenum shaderType, path pathToShader) {
 
     if (!pathToShader.exists()) {
-        GAN_AppendError("gl::compileShaderFromPath()", "Path provided does not exist.");
+        GAN_AppendLog("gl::compileShaderFromPath()", "Path provided does not exist.");
         return std::nullopt;
     }
     // load the file
     std::ifstream file(pathToShader.expand().c_str());
     if (!file) {
-        GAN_WriteError("gl::compileShaderFromPath()","Failed to open shader file \'", pathToShader.expand().c_str(), "\'");
+        GAN_WriteLog("gl::compileShaderFromPath()","Failed to open shader file \'", pathToShader.expand().c_str(), "\'");
         return std::nullopt;
     }
     std::stringstream ss;
@@ -85,19 +85,19 @@ std::optional<GLuint> gl::compileShaderFromPath(GLenum shaderType, path pathToSh
 
     auto opt = compileShader(data, shaderType, length);
     if (!opt)
-        GAN_AppendError("gl::compileShaderFromPath()", "Shader Verification Failed in VerifyShaderIntegrity().");
+        GAN_AppendLog("gl::compileShaderFromPath()", "Shader Verification Failed in VerifyShaderIntegrity().");
     return opt;
 }
 
 std::optional<GLuint> gl::makeShaderProgram(
     std::initializer_list<path> vertexShaders,
-    std::initializer_list<path> fraGANntShaders)
+    std::initializer_list<path> fragmentShaders)
 {
     if (vertexShaders.size() <= 0) {
-        GAN_WriteError("gl::makeShaderProgram()", "Shader error: must have a minimum of one vertex shader.");
+        GAN_WriteLog("gl::makeShaderProgram()", "Shader error: must have a minimum of one vertex shader.");
         return std::nullopt;
-    } else if (fraGANntShaders.size() <= 0) {
-        GAN_WriteError("gl::makeShaderProgram()", "Shader error: must have a minimum of one fraGANnt shader.");
+    } else if (fragmentShaders.size() <= 0) {
+        GAN_WriteLog("gl::makeShaderProgram()", "Shader error: must have a minimum of one fragment shader.");
         return std::nullopt;
     }
 
@@ -105,24 +105,24 @@ std::optional<GLuint> gl::makeShaderProgram(
     auto program = glCreateProgram();
 
     std::vector<GLuint> shaders;
-    shaders.reserve(vertexShaders.size() + fraGANntShaders.size());
+    shaders.reserve(vertexShaders.size() + fragmentShaders.size());
     for (auto& p: vertexShaders) {
         auto result = compileShaderFromPath(GL_VERTEX_SHADER, p);
         if (!result) {
-            GAN_AppendError("gl::makeShaderProgram()", "Bad result from gl::compileShaderFromPath() for shader ", "\'", p.c_str(), "\'");
+            GAN_AppendLog("gl::makeShaderProgram()", "Bad result from gl::compileShaderFromPath() for shader ", "\'", p.c_str(), "\'");
             return std::nullopt;
         }
         // if successful attach the shader.
         glAttachShader(program, result.value());
         shaders.push_back(result.value());
     }
-    for (auto& p: fraGANntShaders) {
+    for (auto& p: fragmentShaders) {
         auto result = compileShaderFromPath(GL_FRAGMENT_SHADER, p);
         if (!result) {
-            GAN_RawAppendError() << "Failed to compile fraGANnt shader: " << p << ".";
+            GAN_RawAppendLog() << "Failed to compile fragment shader: " << p << ".";
             return std::nullopt;
         }
-        // if successful attach the fraGANnt shader
+        // if successful attach the fragment shader
         glAttachShader(program, result.value());
         shaders.push_back(result.value());
     }
@@ -131,7 +131,7 @@ std::optional<GLuint> gl::makeShaderProgram(
     glLinkProgram(program);
     // if our program did not compile, return nullopt.
     if (!verifyProgramIntegrity(program)) {
-        GAN_AppendError("gl::makeShaderProgram()", "Failed to link program ", (int) program, ". Check error log.");
+        GAN_AppendLog("gl::makeShaderProgram()", "Failed to link program ", (int) program, ". Check error log.");
         return std::nullopt;
     }
     // after linking, we delete all of our shaders.
@@ -143,15 +143,15 @@ std::optional<GLuint> gl::makeShaderProgram(
 }
 
 std::optional<GLuint> gl::rawMakeShaderProgram(
-    std::initializer_list<std::pair<char const *, int>> vertexShaders,
-    std::initializer_list<std::pair<char const *, int>> fraGANntShaders)
+    std::initializer_list<std::pair<char const *, size_t>> vertexShaders,
+    std::initializer_list<std::pair<char const *, size_t>> fragmentShaders)
 {
 
     if (vertexShaders.size() <= 0) {
-        GAN_WriteError("gl::CreateShaderProgram: Must have a minimum of one vertex shader.");
+        GAN_WriteLog("gl::CreateShaderProgram: Must have a minimum of one vertex shader.");
         return std::nullopt;
-    } else if (fraGANntShaders.size() <= 0) {
-        GAN_WriteError("gl::CreateShaderProgram: Must have a minimum of one fraGANnt shader.");
+    } else if (fragmentShaders.size() <= 0) {
+        GAN_WriteLog("gl::CreateShaderProgram: Must have a minimum of one fragment shader.");
         return std::nullopt;
     }
 
@@ -159,24 +159,24 @@ std::optional<GLuint> gl::rawMakeShaderProgram(
     auto program = glCreateProgram();
 
     std::vector<GLuint> shaders;
-    shaders.reserve(vertexShaders.size() + fraGANntShaders.size());
+    shaders.reserve(vertexShaders.size() + fragmentShaders.size());
     for (auto& sc: vertexShaders) {
         auto result = compileShader(sc.first, GL_VERTEX_SHADER, sc.second);
         if (!result) {
-            GAN_RawAppendError() << "Failed to compile static vertex shader: " << sc.first << ".";
+            GAN_RawAppendLog() << "Failed to compile static vertex shader: " << sc.first << ".";
             return std::nullopt;
         }
         // if successful attach the shader.
         glAttachShader(program, result.value());
         shaders.push_back(result.value());
     }
-    for (auto& sc: fraGANntShaders) {
+    for (auto& sc: fragmentShaders) {
         auto result = compileShader(sc.first, GL_FRAGMENT_SHADER, sc.second);
         if (!result) {
-            GAN_RawAppendError() << "Failed to compile static fraGANnt shader: " << sc.first << ".";
+            GAN_RawAppendLog() << "Failed to compile static fragment shader: " << sc.first << ".";
             return std::nullopt;
         }
-        // if successful attach the fraGANnt shader
+        // if successful attach the fragment shader
         glAttachShader(program, result.value());
         shaders.push_back(result.value());
     }

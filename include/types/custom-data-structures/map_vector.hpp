@@ -39,7 +39,7 @@ namespace gan {
             return std::nullopt;
         }
         /// Returns the object at the given index in the vector
-        std::optional<T*> vec(size_t index) const {
+        std::optional<T*> at(size_t index) const {
             if (index < vector.size() && std::find(destroyed.begin(), destroyed.end(), index) == destroyed.end())
                 return const_cast<T*>(vector.data() + index);
             return std::nullopt;
@@ -94,7 +94,7 @@ namespace gan {
             if (const auto* k = std::get_if<Key>(&type)) {
                 return map(*k);
             }
-            return vec(std::get<size_t>(type));
+            return at(std::get<size_t>(type));
         }
         /// Returns true if the map_vector has the provided key
         bool has(Key k) {
@@ -108,6 +108,18 @@ namespace gan {
         }
         auto end()  {
             return vector.end();
+        }
+
+        T& back() {
+            return vector.back();
+        }
+
+        size_t size() {
+            return vector.size();
+        }
+
+        T& operator[](size_t index) {
+            return vector[index];
         }
     };
 

@@ -1,34 +1,34 @@
 # options for compiling locally
 
 # compiler warning
-if (APPLE)
-target_compile_options(ECSEngine PRIVATE
-        -Werror
-        -Wall
-        -DGL_SILENCE_DEPRECATION
-        -O3
+
+target_link_options(ECSEngine PRIVATE
+    -fsanitize=address
+    -fsanitize=undefined
 )
-elseif(UNIX)
+
 target_compile_options(ECSEngine PRIVATE
     -Werror
     -Wall
     -DGL_SILENCE_DEPRECATION
-    -O3
-    -DSDL_X11_XTEST=OFF
+    -O1
+    -fsanitize=address
+    -fsanitize=undefined
+    -g
 )
-endif()
 
 
 
-if(APPLE)
-# other libraries
-target_link_libraries(ECSEngine PRIVATE
+if(APPLE)   # other libraries
+    message("linking apple libs")
+    target_link_libraries(ECSEngine PRIVATE
         Render_Lib
         SDL3::SDL3
         glm::glm
         OpenGL::GL
         glfw
-)
+        glbinding::glbinding
+    )
 else()
     target_link_libraries(ECSEngine PRIVATE
         Render_Lib
@@ -38,11 +38,3 @@ else()
     )
 endif()
 
-
-if(APPLE)
-    target_link_libraries(ECSEngine PRIVATE
-            "-framework Cocoa"
-            "-framework IOKit"
-            "-framework CoreVideo"
-    )
-endif()

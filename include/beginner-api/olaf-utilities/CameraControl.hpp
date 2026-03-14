@@ -61,8 +61,8 @@ namespace gan {
         if (!requireRightClick || mouse.isRightClicked()) {
             constexpr float pi = 3.14159;
             static float yaw = pi, pitch = 0.f;
-            yaw -= mouse.getDeltaMouseX() * sensitivity;
-            pitch -= mouse.getDeltaMouseY() * sensitivity;
+            yaw -= mouse.getDeltaX() * sensitivity;
+            pitch -= mouse.getDeltaY() * sensitivity;
             pitch = std::clamp(pitch, -pi/2.f, pi/2.f);
 
             cam.forward = {sinf(yaw), sinf(pitch), cosf(yaw)};
@@ -88,8 +88,8 @@ namespace gan {
         static float yaw = pi, pitch = 0.1f;
         // Handle camera rotation movement.
         if (!requireRightClick || mouse.isRightClicked()) {
-            yaw -= mouse.getDeltaMouseX() * sensitivity;
-            pitch += mouse.getDeltaMouseY() * sensitivity;
+            yaw -= mouse.getDeltaX() * sensitivity;
+            pitch += mouse.getDeltaY() * sensitivity;
         }
         cam.moveForward(mouse.getScrollWheelY() * sensitivity*35.f);
 

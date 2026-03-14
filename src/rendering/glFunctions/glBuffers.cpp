@@ -9,7 +9,7 @@
 using namespace gan::gl;
 
 template<typename V>
-    requires(std::is_same_v<vertex3, V> || std::is_same_v<V, vertex2>)
+    requires(std::is_same_v<Vertex, V> || std::is_same_v<V, vertex2>)
 VertexBuffer initializeVertexBuffer(
     const V vertices[], uint32_t num_vertices,
     const uint32_t indices[], uint32_t num_indices)
@@ -46,59 +46,7 @@ VertexBuffer initializeVertexBuffer(
         sizeof(V), reinterpret_cast<void*>(offsetof(V, nx)));
     glEnableVertexAttribArray(2);
 
-    vb.indexCount = num_indices;
     // binds the 0 vertex array.
     glBindVertexArray(0); //< now we make sure to unbind our buffer.
     return vb;
-}
-
-
-VertexBuffer gan::gl::createVertexBuffer(
-        const vertex3 vertices[],
-        const uint32_t num_vertices,
-        const uint32_t indices[],
-        const uint32_t num_indices)
-{
-    return initializeVertexBuffer<vertex3>(vertices, num_vertices, indices, num_indices);
-}
-
-
-VertexBuffer gan::gl::createVertexBuffer(
-        const vertex2 vertices[],
-        const uint32_t num_vertices,
-        const uint32_t indices[],
-        const uint32_t num_indices)
-{
-    // create our vertex buffer object
-    VertexBuffer vb;
-    // get our stride
-    constexpr GLsizei stride = sizeof(vertex2) + sizeof(glm::mat4);
-
-
-    // now we tie this vertex data to the shader.
-    // first we specify position 1 -> position
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
-        stride, nullptr);
-    glEnableVertexAttribArray(0);
-    // next we specify position 2 -> uv
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE,
-        stride, reinterpret_cast<void*>(offsetof(vertex2, u)));
-    glEnableVertexAttribArray(1);
-    // finally get color
-    glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE,
-        stride, reinterpret_cast<void*>(offsetof(vertex2, r)));
-    glEnableVertexAttribArray(2);
-    glBindVertexArray(0); //< now we make sure to unbind our buffer.
-    // update our vertex pointer
-    vb.indexCount = num_indices;
-    // return our vertexBuffer object.
-    return vb;
-}
-
-
-
-void gan::gl::destroyVertexBuffer(const VertexBuffer& vb) {
-    glDeleteVertexArrays(1, &vb.vao); //< Destroy the vertex array
-    glDeleteBuffers(1, &vb.vbo); //< Delete the vertex buffer
-    glDeleteBuffers(1, &vb.ebo); //< Delete the index buffer
 }

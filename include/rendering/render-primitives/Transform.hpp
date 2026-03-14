@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include "beginner-api/factory/shapes/Colors.hpp"
 
 namespace gan {
 
@@ -13,6 +14,8 @@ namespace gan {
         glm::quat rotation{0.f, 0.f, 0.f, 0.f};
         /// The x, y, z scale of the model.
         glm::vec3 scale{1.f, 1.f, 1.f};
+        /// The color fo the model
+        RGBAVal color{1.f, 1.f, 1.f, 1.f};
 
         /// Composes the 4x4 transformation matrix for this model.
         [[nodiscard]] glm::mat4 compose() const {
@@ -52,4 +55,5 @@ namespace gan {
             pos.z = z;
         }
     };
+    static_assert(std::is_aggregate_v<Transform>);
 }

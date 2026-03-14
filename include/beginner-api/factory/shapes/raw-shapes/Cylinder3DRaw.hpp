@@ -3,7 +3,7 @@
 #include <array>
 #include <cmath>
 #include <cstdint>
-#include <rendering/glPrimitives/glVertex.hpp>
+#include <rendering/render-primitives/Vertex.hpp>
 
 #include "glm/vec3.hpp"
 
@@ -19,10 +19,10 @@ namespace gan {
         static constexpr int numVertices = 2 * (Detail + 1);
         static constexpr int numIndices = 4 * Detail * 3;
 
-        inline static gl::vertex3 vertexList[numVertices] = {};
+        inline static Vertex vertexList[numVertices] = {};
         inline static std::array<unsigned int, numIndices> indexList = {};
 
-        static const gl::vertex3* vertices() {
+        static const Vertex* vertices() {
             static bool isInitialized = false;
             // if not initialized form the vertices.
             if (!isInitialized) {
@@ -30,22 +30,22 @@ namespace gan {
                 constexpr float angDiv = 2*3.14159265/((numVertices-2)/2);
                 float currentAng = 0;
                 for (int i = 0; i < (numVertices-2)/2; i++) {
-                    vertexList[i] = gl::vertex3(
+                    vertexList[i] = Vertex(
                         cosf(currentAng),
                         sinf(currentAng),
                         1.f
                     );
-                    vertexList[i + (numVertices-2)/2] = gl::vertex3(
+                    vertexList[i + (numVertices-2)/2] = Vertex(
                         cosf(currentAng),
                         sinf(currentAng),
                         -1.f
                     );
                     currentAng += angDiv;
                 }
-                vertexList[numVertices-2] = gl::vertex3(
+                vertexList[numVertices-2] = Vertex(
                     0.f, 0.f, 1.f, 0.f, 0.f
                 );
-                vertexList[numVertices-1] = gl::vertex3(
+                vertexList[numVertices-1] = Vertex(
                     0.f, 0.f, -1.f, 0.f, 0.f);
             }
             return vertexList;
@@ -60,7 +60,7 @@ namespace gan {
             static bool isInitialized = false;
             if (!isInitialized) {
 
-                static_assert(alignof(gl::vertex3) <= alignof(std::max_align_t));
+                static_assert(alignof(Vertex) <= alignof(std::max_align_t));
                 // first we get the bottom & top rendered.
                 for (size_t i = 0; i < Detail; i++) {
                     indexList[i*3] = i;

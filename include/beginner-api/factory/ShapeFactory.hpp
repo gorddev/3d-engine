@@ -1,9 +1,7 @@
 #pragma once
 
-#include "rendering/glFunctions/glBuffers.hpp"
-#include "rendering/glPrimitives/glVertexBuffer.hpp"
+#include "rendering/render-primitives/VertexBuffer.hpp"
 #include "rendering/shaders/ShaderManager.hpp"
-#include "shapes/Colors.hpp"
 #include "shapes/raw-shapes/Box3DRaw.hpp"
 
 // made by gordie novak feb 21st, 2023
@@ -18,25 +16,20 @@ namespace gan {
         /// Needs to reference the shader manager to initialize objects with shaders
         const ShaderHandler& shaderManager;
         /// Internal vector to destroy/reuse vertex buffers.
-        std::vector<gl::VertexBuffer> vertexBuffers;
+        std::vector<VertexBuffer> vertexBuffers;
 
         /// Gets an element specific VertexBuffer
         /// @tparam ShapeT The Shape you want the associated vertex buffer for.
         /// @return A vertex buffer appropriate for said shape.
         template<typename ShapeT>
-        gl::VertexBuffer getShapeVertexBuffer() {
+        VertexBuffer getShapeVertexBuffer() {
             static size_t buffer_id = vertexBuffers.size(); //< Static permanent reference to position in the vector.
             if (buffer_id >= vertexBuffers.size())
                 vertexBuffers.resize(buffer_id + 1);
             else if (vertexBuffers[buffer_id].vao != 0)
                 return vertexBuffers[buffer_id];
-            // First, create an array of the size of the sister type.
-            gl::vertex3 vertArr[ShapeT::SisterType::numVertices];
-            // Next, copy the indices from the sister type into the vertexArray.
-            std::memcpy(vertArr, ShapeT::SisterType::vertices(), sizeof(vertArr));
-            // create our vertex buffer
-              vertexBuffers[buffer_id] = gl::createVertexBuffer(vertArr, ShapeT::SisterType::numVertices,
-                ShapeT::SisterType::indices().data(), ShapeT::SisterType::numIndices);
+            vertexBuffers[buffer_id] = VertexBuffer::make(
+                ShapeT::SisterType::vertices(), ShapeT::SisterType::numVertices);
             return vertexBuffers[buffer_id];
         }
 
@@ -45,25 +38,27 @@ namespace gan {
         /// @return A vertex buffer appropriate for said shape.
         template<typename ShapeT, size_t Detail>
             requires(ShapeT::DefaultDetail > 4)
-        gl::VertexBuffer getShapeVertexBuffer() {
+        VertexBuffer getShapeVertexBuffer() {
             static size_t buffer_id = vertexBuffers.size(); //< Static permanent reference to position in the vector.
             if (buffer_id >= vertexBuffers.size())
                 vertexBuffers.resize(buffer_id + 1);
             else if (vertexBuffers[buffer_id].vao != 0)
                 return vertexBuffers[buffer_id];
-            // First, create an array of the size of the sister type.
-            gl::vertex3 vertArr[ShapeT::template SisterType<Detail>::numVertices];
-            // Next, copy the indices from the sister type into the vertexArray.
-            std::memcpy(vertArr, ShapeT::template SisterType<Detail>::vertices(), sizeof(vertArr));
-            // create our vertex buffer
-            vertexBuffers[buffer_id] = gl::createVertexBuffer(vertArr, ShapeT::template SisterType<Detail>::numVertices,
-              ShapeT::template SisterType<Detail>::indices().data(), ShapeT::template SisterType<Detail>::numIndices);
+            vertexBuffers[buffer_id] = VertexBuffer::make(ShapeT::template SisterType<Detail>::vertices(),
+              ShapeT::template SisterType<Detail>::numVertices);
             return vertexBuffers[buffer_id];
         }
 
-    public:
+        friend class Book;
         explicit ShapeFactory(const ShaderHandler& shaderManager)
-            : shaderManager(shaderManager) {}
+            : shaderManager(shaderManager) {
+            static size_t count = 0;
+            if (count != 0) {
+                throw std::runtime_error("Cannot make more than one ShapeFactory.");
+            }
+            count++;
+        }
+    public:
 
         /// @tparam ShapeT The type of shape you want to create.
         /// @param color The color of the shape you want to create.
@@ -99,7 +94,7 @@ namespace gan {
 
         ~ShapeFactory() {
             for (auto& vb : vertexBuffers) {
-                gl::destroyVertexBuffer(vb);
+                VertexBuffer::destroy(vb);
             }
         }
     };

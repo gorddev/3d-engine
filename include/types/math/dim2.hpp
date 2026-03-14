@@ -6,7 +6,7 @@ namespace gan {
      * @details Contains @code ==, !=, +, -@endcode nontrivial operator overloads and an @code int area()@endcode function that returns @code w*h@endcode.
      * @note Typically used for 2D object's demensions in a limited game environment world.*/
     struct dim2 {
-        short w, h;
+        uint32_t w, h;
         template<typename T>
             requires(std::is_integral_v<T>)
         dim2(T w, T h) : w(w), h(h) {}

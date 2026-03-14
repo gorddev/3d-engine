@@ -1,7 +1,7 @@
 #pragma once
 #include <filesystem>
 
-#include "../debug/gan_io.hpp"
+#include "../debug/gan_err.hpp"
 
 namespace gan {
 
@@ -67,11 +67,11 @@ namespace gan {
         [[nodiscard]] bool exists() const {
             const path expanded = expand();
             if (!std::filesystem::exists(expanded.c_str())) {
-                GAN_WriteError("path::exists()",
+                GAN_WriteLog("path::exists()",
                     "The file ", expanded.c_str(), " doesn't exist.");
                 return false;
             } if (!std::filesystem::is_regular_file(expanded.c_str())) {
-                GAN_WriteError("path::exits()",
+                GAN_WriteLog("path::exits()",
                     "The file ", expanded.c_str(), " is not a regular file.");
                 return false;
             }

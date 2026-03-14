@@ -40,6 +40,9 @@ namespace gan {
         [[nodiscard]] bool requiresModelMatrix() const;
         /// Returns true if this shader binds to textures per model.
         [[nodiscard]] bool requiresTexture() const;
+
+        GLint getTexLocation() const;
+
         /// Gets the underlying openGL program so you can add unforms
         [[nodiscard]] GLuint getGLProgram() const;
 

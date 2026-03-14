@@ -27,9 +27,9 @@ namespace gan {
         /// User-created shader programs
         map_vector<std::string, Shader> shaderPrograms;
         /// Default shader programs
-        GLuint default3DProgram = -1, default2DProgram = -1;
+        GLuint default3DProgram = 0, default2DProgram = 0;
         /// Current shader program
-        GLuint currentProgram_id = -1;
+        GLuint currentProgram_id = 0;
 
         friend class gan::Renderer; ///< Renderer needs special privileges to stuff in the ShaderManager.
         friend class EngineCore;
@@ -58,7 +58,7 @@ namespace gan {
         /// Creates an OpenGL shader program from the provided shaders along the paths.
         /// @param shaderName The name you want to bind to the shader.
         /// @param vertexShaders The paths to the vertex shader strings
-        /// @param fragmentShaders The paths to the fraGANnt shader strings.
+        /// @param fragmentShaders The paths to the fragment shader strings.
         /// @param userUniforms Sets up uniforms to be edited and updated automatically.
         void makeShader(const std::string &shaderName,
                 std::initializer_list<path> vertexShaders,
@@ -82,6 +82,12 @@ namespace gan {
                 "ShaderManager::getDefault3DShader()", "Shader does not exist.")
                 ->program;
         }
+
+        /// Gets the base shader of the shaderManager
+        [[nodiscard]] GLuint base() {
+            return shaderPrograms.at(0).value()->getGLProgram();
+        }
+
         /// Gets a shader by program_id
         [[nodiscard]] std::optional<Shader*> getShaderByProgramID(GLuint program_id) {
             for (auto& shader : shaderPrograms) {
@@ -89,11 +95,10 @@ namespace gan {
                     return &shader;
                 }
             }
-            GAN_WriteError("ShaderManager::getShaderByProgramID()",
+            GAN_WriteLog("ShaderManager::getShaderByProgramID()",
                     "failed to retrieve program, ", program_id, " as it does not exist.");
             return std::nullopt;
         }
-
 
         // ensure it can't be moved/copied
         ShaderHandler(ShaderHandler&&)                  = delete;   ///< Nope. You can't do that.
@@ -106,13 +111,15 @@ namespace gan {
         [[nodiscard]] std::optional<Shader*> getShaderByIndex(GLuint index) const {
             const auto s =  shaderPrograms.get(index);
             if (!s) {
-                GAN_WriteError("ShaderManager::getShaderByIndex()",
+                GAN_WriteLog("ShaderManager::getShaderByIndex()",
                     "Shader program ", static_cast<int>(index), " not found.");
             }
             return s;
         }
         /// Updates per-frame uniforms
         void updateFrameUniforms(EngineCore& core, Camera& cam);
+        /// Updates global uniforms for all shaders
+        void updateGlobalUniforms(EngineCore& core);
     };
 
 

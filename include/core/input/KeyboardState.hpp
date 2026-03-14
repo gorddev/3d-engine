@@ -2,7 +2,7 @@
 #include <array>
 #include <unordered_map>
 #include "./KeypressTypeEnum.inl"
-#include "../debug/gan_io.hpp"
+#include "../debug/gan_err.hpp"
 // Created by Gordie Novak on 2/26/26.
 // handles keyboard management and data access for currently held keys.
 

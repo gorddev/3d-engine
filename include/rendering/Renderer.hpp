@@ -17,11 +17,10 @@ namespace gan {
     class EngineCore; //< forward declaration for EngineCore
     class LayerList; //< forward declaration for LayerList
     class Font; //< forward declaration for Font
-    class Model; //< A model the renderer needs in order to draw.
+    struct Model; //< A model the renderer needs in order to draw.
 
     /// The renderer's job is to render everything assigned to each layer.
     class Renderer {
-
         /// Reference to the window
         EngineCore& core;
         /// The opengl context handle
@@ -59,7 +58,7 @@ namespace gan {
         /// @param texture The texture you want to wipe and select.
         void setRenderTarget(SDL_Texture* texture);
 
-        static void drawInstance(std::vector<RenderQueue::ModelInstance>& instances, const Shader& shader);
+        void drawInstance(std::vector<RenderQueue::ModelInstance>& instances, const Shader& shader) const;
     };
 
 

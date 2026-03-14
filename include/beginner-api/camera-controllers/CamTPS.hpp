@@ -65,13 +65,13 @@ namespace gan {
             // Handle camera rotation movement.
 
             if (!requireRightClick || mouse.isRightClicked()) {
-                yaw -= mouse.getDeltaMouseX() * mouseSensitivity;
-                pitch += mouse.getDeltaMouseY() * mouseSensitivity;
+                yaw -= mouse.getDeltaX() * mouseSensitivity;
+                pitch += mouse.getDeltaY() * mouseSensitivity;
             }
             // prevent the pitch from moving below ground or above sky
             pitch = std::clamp(pitch, pitch_min, pitch_max);
 
-            cam.moveForward(mouse.getScrollWheelY()*mouseSensitivity*15.f);
+            cam.moveForward(mouse.getScrollWheelY()*mouseSensitivity*40.f);
 
             const auto diff = glm::distance(cam.pos, axis);
             cam.pos = axis + diff *

@@ -3,7 +3,7 @@
 #include <glm/vec4.hpp>
 
 #include "../ShapeUtils.hpp"
-#include "rendering/glPrimitives/glVertex.hpp"
+#include "rendering/render-primitives/Vertex.hpp"
 
 // made by gordie novak on feb 21st, 2026
 // the rectangle is just like a square, but it's a rectangle!
@@ -12,41 +12,48 @@ namespace gan {
 
     struct Box3DRaw {
         /// The number of vertices that make up a rectangle.
-        static constexpr size_t numVertices = 8;
-        /// The number of indices used to index the vertices of the rectangle.
-        static constexpr size_t numIndices = 36;
-        /// Ensures that the Rect3D is properly set up.
-        static unsigned int constexpr rectIndices[] = {
-            0,1,2, 2,3,0,
-            4,5,6, 6,7,4,
-            0,4,7, 7,3,0,
-            1,5,6, 6,2,1,
-            3,2,6, 6,7,3,
-            0,1,5, 5,4,0
-        };
+        static constexpr size_t numVertices = 36;
 
         /// Constexpr vertex creation method.
-        static constexpr const gl::vertex3* vertices() noexcept {
-            static const gl::vertex3 rectVertices[8] = {
-                {-1.f, -1.f, -1.f, 1.0, 1.0, 1.0, 1.0},
-                { 1.f, -1.f, -1.f, 1.0, 1.0, 1.0, 1.0},
-                { 1.f,  1.f, -1.f, 1.0, 1.0, 1.f, 1.0},
-                {-1.f,  1.f, -1.f, 1.0, 1.0, 1.0, 1.0},
+        static constexpr const Vertex* vertices() noexcept {
+            static const Vertex rectVertices[numVertices] = {
+                // Front (+Z)
+                {-1,-1, 1},
+                { 1,-1, 1},
+                { 1, 1, 1},
+                {-1,-1, 1},
+                {1, 1, 1},
+                {-1, 1, 1},
 
-                {-1.f, -1.f,  1.f, 1.0, 1.0, 1.0, 1.0},
-                { 1.f, -1.f,  1.f, 1.0, 1.0, 1.0, 1.0},
-                { 1.f,  1.f,  1.f, 1.0, 1.0, 1.0, 1.0},
-                {-1.f,  1.f,  1.f, 1.0, 1.0, 1.0, 1.0},
+                // Back (-Z)
+                {1,-1,-1},
+                {-1,-1,-1},
+                {1,-1,-1},
+                {1,-1,-1},
+                {-1, 1,-1},
+                {1, 1,-1},
+
+                // Left (-X)
+                {-1,-1,-1},
+                {-1,-1, 1},
+                {-1, 1, 1},
+                {-1,-1,-1},
+                {-1, 1, 1},
+                {-1, 1,-1},
+
+                // Right (+X)
+                {1,-1, 1},  {1,-1,-1},  {1, 1,-1},
+                {1,-1, 1},  {1, 1,-1},  {1, 1, 1},
+
+                // Top (+Y)
+                {-1, 1, 1},  {1, 1, 1},  {1, 1,-1},
+                {-1, 1, 1},  {1, 1,-1}, {-1, 1,-1},
+
+                // Bottom (-Y)
+                {-1,-1,-1},  {1,-1,-1},  {1,-1, 1},
+                {-1,-1,-1},  {1,-1, 1}, {-1,-1, 1}
             };
             return rectVertices;
-        }
-
-        static constexpr std::array<unsigned int, numIndices> indices() noexcept {
-            std::array<unsigned int, numIndices> indexArr{};
-            // copy the constant indices into our indexes array.
-            memcpy(indexArr.data(), rectIndices, numIndices * sizeof(uint32_t));
-            // return our indices.
-            return indexArr;
         }
 
         static constexpr glm::vec3 scaleFactor(float w, float h, float l) {

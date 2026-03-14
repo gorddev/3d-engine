@@ -15,7 +15,7 @@ Now, my_float will be truncated to four digits automatically without me having t
 ### fstrings  
 First up we have `fstring`, which stands for **fixed string**. `fstring` is a templatede class, and this means that upon creation, these strings have completely **fixed length** that cannot be changed. These are great for text buffers that get refreshed repeatedly, and for ensuring compliance with specific string lengths. However, the main benefits are below:
 - Significantly faster for writing and conversion than regular `std::string` (around 2x - 3x faster)
-- Lives on the stack, so heap fraGANntation (especially in WASM) is not a concern for fstrings
+- Lives on the stack, so heap fragmentation (especially in WASM) is not a concern for fstrings
 - Prevents any overflow automatically.
 
 For example, the `gan::Text` class is templated with an `fstring`, because in reality, displayed text on screen should never be unbounded, and when users make a text object, they should define how it will be used.
@@ -42,7 +42,7 @@ Ok we'll keep this short. `hstrings` are just `fstrings` but their memory is all
 - Dynamically resizable & virtually unlimited size
 - Access to all the nice operator overloads `fstring` has. 
 #### Cons:
-- It's on the heap, so fraGANntation can be a problem
+- It's on the heap, so fragmentation can be a problem
 - Slower than `fstring`
 - Higher memory baseline than `fstring`
 - Constantly allocates new memory, which is really bad for WASM environment

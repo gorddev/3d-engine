@@ -36,29 +36,29 @@ namespace gan {
     public:
         // <><><> Mouse positioning <><><>
         /// Returns the current mouse position.
-        [[nodiscard]] glm::vec2 getMousePos() const {
+        [[nodiscard]] glm::vec2 getPos() const {
             return mousePos;
         }
         /// Returns the x-position of the mouse
-        [[nodiscard]] float getMouseX() const {
+        [[nodiscard]] float getX() const {
             return mousePos.x;
         }
         /// Returns the y-position of the mouse
-        [[nodiscard]] float getMouseY() const {
+        [[nodiscard]] float getY() const {
             return mousePos.y;
         }
         /// Returns the change in mouse position
-        [[nodiscard]] glm::vec2 getDeltaMousePos() const {
+        [[nodiscard]] glm::vec2 getDeltaPos() const {
             return deltaMousePos;
         }
 
         /// Returns the change in MousePosX()
-        [[nodiscard]] float getDeltaMouseX() const {
+        [[nodiscard]] float getDeltaX() const {
             return deltaMousePos.x;
         }
 
         /// Returns the change in MousePosY()
-        [[nodiscard]] float getDeltaMouseY() const {
+        [[nodiscard]] float getDeltaY() const {
             return deltaMousePos.y;
         }
 

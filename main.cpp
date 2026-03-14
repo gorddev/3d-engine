@@ -4,7 +4,6 @@
 #define OLAF_API
 #include "beginner-api/camera-controllers/CamTPS.hpp"
 #include "include/gan_callbacks.hpp"
-
 #include "beginner-api/olaf-utilities/MultiObjectGeneration.hpp"
 
 using namespace gan;
@@ -13,14 +12,15 @@ static std::vector<ShapeAPI> boxes;
 
 int g_main(Book& book, int argc, char* argv[]) {
 
-    boxes.push_back(book.shapes.make<Cylinder3D>(1.f, 1.f));
-    boxes.push_back(book.shapes.make<Prism3D>(.5f, .5f, .5f));
+    boxes.push_back(book.shapes.make<Box3D>(.5f, .5f, .5f));
+
 
     auto grid = generateGrid(book.shapes, 20);
     for (auto& g: grid) {
         boxes.push_back(g);
     }
     boxes.insert(boxes.end(), grid.begin(), grid.end());
+
 
     return 0;
 }

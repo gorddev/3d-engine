@@ -27,7 +27,8 @@ namespace gan {
         AutoTime,           ///< Automatically update with global time (float)
         AutoDeltaTime,      ///< Automatically update with global delta time (float)
         AutoFrame,          ///< Automatically update with global frame number (int)
-        AutoMousePos,       ///< Automatically update with global mouse pos. (float)
+        AutoMousePos,       ///< Automatically update with global mouse pos. (vec2)
+        AutoResolution,     ///< Automatically updates the global uniform resolution (vec2)
         // <><> Per-Object Updates <><>
         AutoModel,          ///< Automatically update with model mat4
         AutoTexture,        ///< Automatically update with model texture (sampler2D)

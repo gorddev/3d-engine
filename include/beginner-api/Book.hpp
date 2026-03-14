@@ -45,7 +45,7 @@ namespace gan {
         Renderer& render;           ///< Renderer you can use to draw objects.
         ShaderHandler& shaders;     ///< API for changing/swapping/writing shaders.
         ShapeFactory shapes;        ///< API for creating shapes
-        Clock& clock;                ///< API for querying for current time
+        Clock& clock;               ///< API for querying for current time
         Window& window;             ///< API for handling the window
         union {Camera camera, cam;};///< API for camera.
 
@@ -55,6 +55,10 @@ namespace gan {
             return engine.core;
         }
 
+        Book operator=(const Book& book)    = delete; /// Nope, you can't do that
+        Book(const Book& book)              = delete; /// Nope, you can't do that
+        Book operator=(Book&& book)         = delete; /// Nope, you can't do that
+        Book(const Book&& book)             = delete; /// Nope, you can't do that
 
     };
 }

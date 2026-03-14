@@ -1,6 +1,6 @@
 #include <rendering/shaders/ShaderManager.hpp>
 
-#include "../../../include/core/debug/gan_io.hpp"
+#include "../../../include/core/debug/gan_err.hpp"
 #include <rendering/glFunctions/glShaders.hpp>
 #include <core/filesystem/filesystem.hpp>
 #include <utility>

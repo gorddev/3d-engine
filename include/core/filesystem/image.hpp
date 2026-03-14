@@ -18,7 +18,7 @@ namespace gan {
 
         static std::optional<image> make(const path& path) {
             if (!path.exists()) {
-                GAN_AppendError("image::make()",
+                GAN_AppendLog("image::make()",
                     "Path ", path.c_str(), "reports being invalid.");
                 return std::nullopt;
             }
@@ -30,7 +30,7 @@ namespace gan {
                 nullptr, 0);
 
             if (!pixels) {
-                GAN_WriteError("image::make()",
+                GAN_WriteLog("image::make()",
                     "STB_Image reported failure with error: ", stbi_failure_reason());
                 return std::nullopt;
             }

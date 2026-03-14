@@ -3,9 +3,7 @@
 set(RENDERING_SRC
         Renderer.cpp
         Window.cpp
-        glFunctions/glTextures.cpp
         glFunctions/glShaders.cpp
-        glFunctions/glBuffers.cpp
         shaders/Shader.cpp
         shaders/ShaderManager.cpp
         texture/stb_image.c

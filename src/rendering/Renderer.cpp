@@ -6,11 +6,12 @@
 #include "rendering/Renderer.hpp"
 #include <OpenGL.h>
 #include <glm/gtc/type_ptr.hpp>
-#include <rendering/render-math/Model.hpp>
+#include <rendering/render-primitives/Model.hpp>
 
+#include "beginner-api/factory/shapes/Colors.hpp"
 #include "core/EngineCore.hpp"
 #include "glm/gtx/string_cast.hpp"
-#include "rendering/glPrimitives/glVertex.hpp"
+#include "rendering/render-primitives/Vertex.hpp"
 
 using namespace gan;
 
@@ -55,7 +56,6 @@ void Renderer::render() {
     //SDL_GL_SwapWindow(window.SDL_GetWindow());
 }*/
 
-static bool needs_calc = true;
 
 void Renderer::draw3D(Model model) {
     // add models to the model queue
@@ -68,44 +68,8 @@ void Renderer::clear(Camera& camera)  {
     glClearColor(0.1f, 0.1f, 0.1f, 0.3f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    for (auto& shader : shaders.shaderPrograms) {
-        shader.updatePerFrameUniforms(core, camera);
-    }
+    shaders.updateFrameUniforms(core, camera);
 }
-
-static void generateNewMatrixBuffer(const GLuint& instanceVAO, GLuint& instanceVBO) {
-    glBindVertexArray(instanceVAO);
-    // Generate a new matrix buffer.
-    glGenBuffers(1, &instanceVBO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
-    // Then, we make sure to set up model matrices within each shader.
-    for (int i = 0; i < 4; ++i) {
-        constexpr GLuint baseAttrib = 4;
-        // Enable the subarray.
-        glEnableVertexAttribArray(baseAttrib + i);
-        // specify the size of each matrix.
-        glVertexAttribPointer(
-            baseAttrib + i,
-            4,
-            GL_FLOAT,
-            GL_FALSE,
-            sizeof(glm::mat4),
-            reinterpret_cast<void*>(sizeof(glm::vec4) * i)
-        );
-        glVertexAttribDivisor(baseAttrib + i, 1); //< Update on an instance-to-instance basis.
-    }
-}
-
-static void generateNewColorBuffer(const GLuint& instanceVAO, GLuint& instanceVBO) {
-    glBindVertexArray(instanceVAO);
-    // new buffer!
-    glGenBuffers(1, &instanceVBO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
-
-}
-
 
 void Renderer::present()  {
     int count = 0;
@@ -119,51 +83,83 @@ void Renderer::present()  {
             , "Renderer::present()", "Shader requested with program id",
             program, " is invalid as reported by the ShaderHandler.");
 
-        glUseProgram(program);
-
         drawInstance(instances, shader);
 
     }
+    // clear our current render queue.
     r_queue.clearModelTree();
-
+    // swap to the current window
     SDL_GL_SwapWindow(core.window.sdl_window);
-    needs_calc = true;
 }
 
-void Renderer::drawInstance(std::vector<RenderQueue::ModelInstance>& instances, const Shader& shader) {
+void Renderer::drawInstance(std::vector<RenderQueue::ModelInstance>& instances, const Shader& shader) const {
     // go through each of our instances
-    for (auto& instance : instances) {
-        // first bind our vertex array
 
-        if (!shader.requiresModelMatrix()) {
-            // If our VBO isn't set up for this shape instance yet, we need to creat it.
-            if (instance.instVBO == 0)
-                generateNewMatrixBuffer(instance.vb.vao, instance.instVBO);
+    auto current_tex = core.texRg[0].gl_id;
+    glUseProgram(shader.getGLProgram());
 
-            // now we create a map to write to
-            glBindBuffer(GL_ARRAY_BUFFER, instance.instVBO);
+    for (auto& [vb, mesh, models, colors] : instances) {
 
-            glBufferData(
+        // **************
+        // Textures
+        // **************
+        if (shader.requiresTexture() && current_tex != mesh.tex_id) {
+            current_tex = mesh.tex_id;
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, core.texRg[0].gl_id);
+            glUniform1i(shader.getTexLocation(), 0);
+        }
+
+        // **************
+        // Colors
+        // **************
+        if (!vb.cbo) {
+            err::panic_if(
+                VertexBuffer::genColorVBO(vb, 3),
+                "Renderer::drawInstance()",
+                "Attempted to create a color buffer object with vao: ", vb.vao, "in file ", __FILE_NAME__
+            );
+        }
+        glBindBuffer(GL_ARRAY_BUFFER, vb.cbo);
+        glBufferData(
             GL_ARRAY_BUFFER,
-                instance.models.size() * sizeof(glm::mat4),
-                instance.models.data(),
+            sizeof(RGBAVal) * colors.size(),
+            colors.data(),
+            GL_DYNAMIC_DRAW
+        );
+
+        GL_CHECK();
+
+        // **************
+        // Model Matrices
+        // **************
+        if (!shader.requiresModelMatrix()) {
+            // If our mbo isn't set up for this shape instance yet, we need to create it.
+            if (vb.mbo == 0) {
+                err::panic_if(
+                    VertexBuffer::genMatrixVBO(vb, 4),
+                    "Renderer::drawInstance()",
+                    "Attempted to create a matrix buffer object "
+                    "for an instance w/vao: ", vb.vao, "in file ", __FILE_NAME__
+                );
+            }
+            // now we create a map to write to
+            glBindBuffer(GL_ARRAY_BUFFER, vb.mbo);
+            //TODO: Try keeping track of current count of models so we can potentially use glBufferSubData
+            glBufferData(
+                GL_ARRAY_BUFFER,
+                static_cast<GLsizeiptr>(sizeof(glm::mat4) * models.size()),
+                models.data(),
                 GL_DYNAMIC_DRAW
             );
         }
-
-        if (!shader.requiresTexture()) {
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, instance.mesh.gl_tex_id);
-        }
-
-        glBindVertexArray(instance.vb.vao);
-        glDrawElementsInstanced(
+        glBindVertexArray(vb.vao);
+        glDrawArraysInstanced(
             GL_TRIANGLES,
-            instance.vb.indexCount,
-            GL_UNSIGNED_INT,
-            nullptr,
-            instance.models.size()
+            0, vb.vertexCount,
+            static_cast<GLsizei>(models.size())
         );
+
         glBindVertexArray(0);
     }
 }

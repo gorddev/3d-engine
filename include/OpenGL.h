@@ -6,17 +6,17 @@
 
 #ifdef __APPLE__
     #define GLFW_INCLUDE_GLCOREARB
+    #define GAN_DESKTOP_GL
     #include <GLFW/glfw3.h>
 #elifdef __EMSCRIPTEN__
+    #define GAN_GLES
     #include <GLES3/gl3.h>
-    #ifndef GL_WRITE_ONLY
-    #define GL_WRITE_ONLY 0x88B9
-    #endif
 #elifdef __linux__
+    #define GAN_GLES
     #include <GLES3/gl3.h>
 #endif
 
-// GL_CHECK function which just polls all the errors and returns the error code, line, & file.
+// GL_CHECK function which just polls the errors and returns the error code, line, & file.
 #define GL_CHECK() \
 do { \
 GLenum err = glGetError(); \
